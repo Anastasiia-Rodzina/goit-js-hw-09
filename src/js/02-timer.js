@@ -25,6 +25,7 @@ const options = {
   minuteIncrement: 1,
   onClose(selectedDates) {
     if (selectedDates[0].getTime() < Date.now()) {
+      refs.startBtn.disabled = true;
       Notify.failure('Please choose a date in the future');
     } else {
       selectedDate = selectedDates[0].getTime();
@@ -45,12 +46,10 @@ function convertMs(ms) {
   const hour = minute * 60;
   const day = hour * 24;
 
-  const days = addLeadingZero(Math.floor(ms / day));
-  const hours = addLeadingZero(Math.floor((ms % day) / hour));
-  const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
-  const seconds = addLeadingZero(
-    Math.floor((((ms % day) % hour) % minute) / second)
-  );
+  const days = Math.floor(ms / day);
+  const hours = Math.floor((ms % day) / hour);
+  const minutes = Math.floor(((ms % day) % hour) / minute);
+  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
   return { days, hours, minutes, seconds };
 }
@@ -79,10 +78,10 @@ const counter = {
 };
 
 function updateTimer({ days, hours, minutes, seconds }) {
-  refs.dataDays.textContent = `${days}`;
-  refs.dataHours.textContent = `${hours}`;
-  refs.dataMinutes.textContent = `${minutes}`;
-  refs.dataSeconds.textContent = `${seconds}`;
+  refs.dataDays.textContent = addLeadingZero(days);
+  refs.dataHours.textContent = addLeadingZero(hours);
+  refs.dataMinutes.textContent = addLeadingZero(minutes);
+  refs.dataSeconds.textContent = addLeadingZero(seconds);
 }
 
 function addLeadingZero(value) {
